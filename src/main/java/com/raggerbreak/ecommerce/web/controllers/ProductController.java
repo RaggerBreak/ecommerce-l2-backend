@@ -1,0 +1,44 @@
+package com.raggerbreak.ecommerce.web.controllers;
+
+import com.raggerbreak.ecommerce.dto.ProductDto;
+import com.raggerbreak.ecommerce.services.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@CrossOrigin("http://localhost:4200")
+@RestController
+@RequestMapping("/api/product")
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final ProductService productService;
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+        return new ResponseEntity<ProductDto>(productService.getProduct(productId), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/category")
+    public ResponseEntity<Page<ProductDto>> getProductsByCategory(@RequestParam("id") Long categoryId,
+                                                                  @RequestParam int page,
+                                                                  @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<Page<ProductDto>>(productService.getProductsByCategory(categoryId, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/nameContaining")
+    public ResponseEntity<Page<ProductDto>> getProductsByNameContaining(@RequestParam String name,
+                                                                        @RequestParam int page,
+                                                                        @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return new ResponseEntity<Page<ProductDto>>(productService.getProductsByNameContaining(name, pageable), HttpStatus.OK);
+    }
+}
