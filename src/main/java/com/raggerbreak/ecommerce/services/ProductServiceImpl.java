@@ -1,7 +1,9 @@
 package com.raggerbreak.ecommerce.services;
 
 import com.raggerbreak.ecommerce.dto.ProductDto;
+import com.raggerbreak.ecommerce.dto.ProductLineDto;
 import com.raggerbreak.ecommerce.repositories.ProductRepository;
+import com.raggerbreak.ecommerce.web.mappers.PageToPageDto;
 import com.raggerbreak.ecommerce.web.mappers.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +16,9 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+
     private final ProductMapper productMapper;
+    private final PageToPageDto pageToPageDto;
 
     @Override
     public ProductDto getProduct(Long productId) {
@@ -24,15 +28,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDto> getProductsByCategory(Long categoryId, Pageable pageable) {
+    public ProductLineDto getProductsByCategory(Long categoryId, Pageable pageable) {
 
-        return productRepository.findByCategoryId(categoryId, pageable)
+
+        Page<ProductDto> page = productRepository.findByCategoryId(categoryId, pageable)
                 .map(productMapper::productToDto);
+
+        return ProductLineDto.builder()
+                .products(page.getContent())
+                .pageDto(pageToPageDto.convert(page))
+                .build();
+
     }
 
     @Override
-    public Page<ProductDto> getProductsByNameContaining(String keyword, Pageable pageable) {
-        return productRepository.findByNameContaining(keyword, pageable)
+    public ProductLineDto getProductsByNameContaining(String keyword, Pageable pageable) {
+
+
+        Page<ProductDto> page = productRepository.findByNameContaining(keyword, pageable)
                 .map(productMapper::productToDto);
+
+        return ProductLineDto.builder()
+                .products(page.getContent())
+                .pageDto(pageToPageDto.convert(page))
+                .build();
     }
 }

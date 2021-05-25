@@ -1,9 +1,9 @@
 package com.raggerbreak.ecommerce.web.controllers;
 
 import com.raggerbreak.ecommerce.dto.ProductDto;
+import com.raggerbreak.ecommerce.dto.ProductLineDto;
 import com.raggerbreak.ecommerce.services.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.data.domain.Pageable;
@@ -26,19 +26,19 @@ public class ProductController {
     }
 
     @GetMapping("/search/category")
-    public ResponseEntity<Page<ProductDto>> getProductsByCategory(@RequestParam("id") Long categoryId,
-                                                                  @RequestParam int page,
-                                                                  @RequestParam int size) {
+    public ResponseEntity<ProductLineDto> getProductsByCategory(@RequestParam("id") Long categoryId,
+                                                                @RequestParam int page,
+                                                                @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<Page<ProductDto>>(productService.getProductsByCategory(categoryId, pageable), HttpStatus.OK);
+        return new ResponseEntity<ProductLineDto>(productService.getProductsByCategory(categoryId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/search/nameContaining")
-    public ResponseEntity<Page<ProductDto>> getProductsByNameContaining(@RequestParam String name,
-                                                                        @RequestParam int page,
-                                                                        @RequestParam int size) {
+    public ResponseEntity<ProductLineDto> getProductsByNameContaining(@RequestParam String name,
+                                                                      @RequestParam int page,
+                                                                      @RequestParam int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        return new ResponseEntity<Page<ProductDto>>(productService.getProductsByNameContaining(name, pageable), HttpStatus.OK);
+        return new ResponseEntity<ProductLineDto>(productService.getProductsByNameContaining(name, pageable), HttpStatus.OK);
     }
 }
