@@ -1,7 +1,7 @@
 package com.raggerbreak.ecommerce.web.controllers;
 
 import com.raggerbreak.ecommerce.domain.Country;
-import com.raggerbreak.ecommerce.repositories.CountryRepository;
+import com.raggerbreak.ecommerce.services.CountryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CountryController {
 
-    private final CountryRepository countryRepository;
+    private final CountryService countryService;
 
     @GetMapping("/getAll")
     public ResponseEntity<List<Country>> getAllCountries() {
-        List<Country> countries = countryRepository.findAll();
-        return new ResponseEntity<>(countries, HttpStatus.OK);
+
+        return new ResponseEntity<>(countryService.getAll(), HttpStatus.OK);
     }
 
 }

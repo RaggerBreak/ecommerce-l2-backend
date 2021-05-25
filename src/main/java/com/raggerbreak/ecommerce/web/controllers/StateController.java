@@ -1,7 +1,7 @@
 package com.raggerbreak.ecommerce.web.controllers;
 
 import com.raggerbreak.ecommerce.domain.State;
-import com.raggerbreak.ecommerce.repositories.StateRepository;
+import com.raggerbreak.ecommerce.services.StateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StateController {
 
-    private final StateRepository stateRepository;
+    private final StateService stateService;
 
     @GetMapping("/search/countryCode")
     public ResponseEntity<List<State>> getAllByCountryCode(@RequestParam("code") String code) {
-        List<State> states = stateRepository.findAllByCountry_Code(code);
-        return new ResponseEntity<>(states, HttpStatus.OK);
+        return new ResponseEntity<>(stateService.getAllByCountry(code), HttpStatus.OK);
     }
 }
