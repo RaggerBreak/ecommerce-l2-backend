@@ -28,7 +28,7 @@ public class DataLoader implements CommandLineRunner {
 
     // Countries and States
 
-    private final String countries[] = {"Brazil", "Canada", "Germany", "India", "Turkey", "United States"};
+    private final String countriesName[] = {"Brazil", "Canada", "Germany", "India", "Turkey", "United States"};
     private final String countriesCode[] = {"BR", "CA", "DE", "IN", "TR", "US"};
 
     private final String brazilStates[] = {"Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal",
@@ -73,11 +73,11 @@ public class DataLoader implements CommandLineRunner {
 
     // Product Category
 
-    private final String productCategory[] = {"Books", "Coffee Mugs", "Mouse Pads", "Luggage Tags"};
+    private final String productCategoryName[] = {"Books", "Coffee Mugs", "Mouse Pads", "Luggage Tags"};
 
     // Products
     // Books
-    private final String books[] = {"Crash Course in Python", "Become a Guru in JavaScript", "Exploring Vue.js",
+    private final String booksName[] = {"Crash Course in Python", "Become a Guru in JavaScript", "Exploring Vue.js",
             "Advanced Techniques in Big Data", "Crash Course in Big Data", "JavaScript Cookbook", "Beginners Guide to SQL",
             "Advanced Techniques in JavaScript", "Introduction to Spring Boot", "Become a Guru in React.js",
             "Beginners Guide to Data Science", "Advanced Techniques in Java", "Exploring DevOps", "The Expert Guide to SQL",
@@ -118,7 +118,18 @@ public class DataLoader implements CommandLineRunner {
             18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99,
             16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99,
             16.99, 16.99, 16.99 };
-    
+
+    private String coffeeMugsName[] = {"Coffee Mug - Express", "Coffee Mug - Cherokee", "Coffee Mug - Sweeper",
+            "Coffee Mug - Aspire", "Coffee Mug - Dorian", "Coffee Mug - Columbia", "Coffee Mug - Worthing",
+            "Coffee Mug - Oak Cliff", "Coffee Mug - Tachyon", "Coffee Mug - Pan", "Coffee Mug - Phase",
+            "Coffee Mug - Falling", "Coffee Mug - Wispy", "Coffee Mug - Arlington", "Coffee Mug - Gazing",
+            "Coffee Mug - Azura", "Coffee Mug - Quantum Leap", "Coffee Mug - Light Years", "Coffee Mug - Taylor",
+            "Coffee Mug - Gracia", "Coffee Mug - Relax", "Coffee Mug - Windermere", "Coffee Mug - Prancer",
+            "Coffee Mug - Recursion", "Coffee Mug - Treasure"};
+
+    private String coffeeMugsDesc = "Do you love mathematics? If so, then you need this elegant coffee mug with an " +
+            "amazing fractal design. You don\'t have to worry about boring coffee mugs anymore. This coffee mug will " +
+            "be the topic of conversation in the office, guaranteed! Buy it now!";
 
     @Override
     public void run(String... args) throws Exception {
@@ -134,9 +145,9 @@ public class DataLoader implements CommandLineRunner {
     private void createCountryAndStates() {
 
         //Countries
-        for(int i=0; i < countries.length; i++) {
+        for(int i = 0; i < countriesName.length; i++) {
             Country country = countryRepository.save(Country.builder()
-                    .name(countries[i])
+                    .name(countriesName[i])
                     .code(countriesCode[i])
                     .build());
 
@@ -146,14 +157,14 @@ public class DataLoader implements CommandLineRunner {
                         .country(country)
                         .build());
             }
-            log.debug(" > " + countries[i]+ " states - done");
+            log.debug(" > " + countriesName[i]+ " states - done");
         }
         log.debug("Country - done");
     }
 
     private void createProductCategory() {
 
-        for (String product : productCategory) {
+        for (String product : productCategoryName) {
             productCategoryRepository.save(ProductCategory.builder()
                     .categoryName(product)
                     .build());
@@ -164,20 +175,23 @@ public class DataLoader implements CommandLineRunner {
     private void createProducts() {
         int sku = 1000;
 
-        String category = productCategory[0];
-        ProductCategory productCategor = productCategoryRepository.findByCategoryName(category);
+        String category = productCategoryName[0];
+        ProductCategory productCategory = productCategoryRepository.findByCategoryName(category);
+        createBooks(sku, productCategory);
 
-        createBooks(sku, productCategor);
+        category = productCategoryName[1];
+        productCategory = productCategoryRepository.findByCategoryName(category);
+        createCoffeeMugs(sku, productCategory);
 
         log.debug("Products - done");
     }
 
     private void createBooks(int sku, ProductCategory productCategory) {
 
-        for (int i=0; i < books.length; i++) {
+        for (int i = 0; i < booksName.length; i++) {
             productRepository.save(Product.builder()
                     .sku("BOOK-TECH-" + sku)
-                    .name(books[i])
+                    .name(booksName[i])
                     .description(booksDesc[i])
                     .unitPrice(BigDecimal.valueOf(bookPrice[i]))
                     .active(true)
@@ -187,5 +201,21 @@ public class DataLoader implements CommandLineRunner {
             sku++;
         }
         log.debug(" > Books - done");
+    }
+
+    private void createCoffeeMugs(int sku, ProductCategory productCategory) {
+        for (int i = 0; i < coffeeMugsName.length; i++) {
+            productRepository.save(Product.builder()
+                    .sku("COFFEEMUG-" + sku)
+                    .name(coffeeMugsName[i])
+                    .description(coffeeMugsDesc)
+                    .unitPrice(BigDecimal.valueOf(18.99))
+                    .active(true)
+                    .unitsInStock(100)
+                    .category(productCategory)
+                    .build());
+            sku++;
+        }
+        log.debug(" > Coffee Mugs - done");
     }
 }
