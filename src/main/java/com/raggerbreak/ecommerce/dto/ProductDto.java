@@ -12,9 +12,9 @@ public class ProductDto {
     private String name;
     private String description;
     private BigDecimal unitPrice;
-    private String imageUrl;
     private boolean active;
     private int unitsInStock;
     private Date dateCreated;
     private Date lastUpdated;
+    private Long imageId;
 }
