@@ -1,8 +1,10 @@
 package com.raggerbreak.ecommerce.bootstrap;
 
 import com.raggerbreak.ecommerce.domain.Country;
+import com.raggerbreak.ecommerce.domain.ProductCategory;
 import com.raggerbreak.ecommerce.domain.State;
 import com.raggerbreak.ecommerce.repositories.CountryRepository;
+import com.raggerbreak.ecommerce.repositories.ProductCategoryRepository;
 import com.raggerbreak.ecommerce.repositories.StateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final CountryRepository countryRepository;
     private final StateRepository stateRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     private final String countries[] = {"Brazil", "Canada", "Germany", "India", "Turkey", "United States"};
     private final String countriesCode[] = {"BR", "CA", "DE", "IN", "TR", "US"};
@@ -61,17 +64,19 @@ public class DataLoader implements CommandLineRunner {
 
     private final String[][] states = {brazilStates, canadaStates, germanyStates, indiaStates, turkeyStates, usStates};
 
+    private final String productCategory[] = {"Books", "Coffee Mugs", "Mouse Pads", "Luggage Tags"};
+
     @Override
     public void run(String... args) throws Exception {
         log.debug("<<<<<<<< Bootstrap START >>>>>>>>");
 
         createCountryAndStates();
+        createProductCategory();
 
         log.debug("<<<<<<<< Bootstrap END >>>>>>>>");
     }
 
     private void createCountryAndStates() {
-
 
         //Countries
         for(int i=0; i < countries.length; i++) {
@@ -88,6 +93,17 @@ public class DataLoader implements CommandLineRunner {
             }
             log.debug( countries[i]+ " states - done");
         }
-        log.debug("Countries - done");
+        log.debug("Country - done");
+    }
+
+    private void createProductCategory() {
+
+        for (String product : productCategory) {
+            productCategoryRepository.save(ProductCategory.builder()
+                    .categoryName(product)
+                    .build());
+        }
+        log.debug("ProductCategory - done");
+
     }
 }
