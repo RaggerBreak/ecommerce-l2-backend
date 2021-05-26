@@ -1,8 +1,7 @@
 package com.raggerbreak.ecommerce.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 import javax.persistence.*;
@@ -12,6 +11,9 @@ import java.util.List;
 @Table(name = "country")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Country {
 
     @Id

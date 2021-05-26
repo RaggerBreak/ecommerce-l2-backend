@@ -1,12 +1,18 @@
 package com.raggerbreak.ecommerce.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "state")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class State {
 
     @Id
@@ -20,6 +26,4 @@ public class State {
     @ManyToOne
     @JoinColumn(name = "country_id")
     private Country country;
-
-
 }
