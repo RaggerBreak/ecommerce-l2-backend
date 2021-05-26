@@ -1,15 +1,19 @@
 package com.raggerbreak.ecommerce.bootstrap;
 
 import com.raggerbreak.ecommerce.domain.Country;
+import com.raggerbreak.ecommerce.domain.Product;
 import com.raggerbreak.ecommerce.domain.ProductCategory;
 import com.raggerbreak.ecommerce.domain.State;
 import com.raggerbreak.ecommerce.repositories.CountryRepository;
 import com.raggerbreak.ecommerce.repositories.ProductCategoryRepository;
+import com.raggerbreak.ecommerce.repositories.ProductRepository;
 import com.raggerbreak.ecommerce.repositories.StateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
 
 
 @Component
@@ -20,6 +24,9 @@ public class DataLoader implements CommandLineRunner {
     private final CountryRepository countryRepository;
     private final StateRepository stateRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final ProductRepository productRepository;
+
+    // Countries and States
 
     private final String countries[] = {"Brazil", "Canada", "Germany", "India", "Turkey", "United States"};
     private final String countriesCode[] = {"BR", "CA", "DE", "IN", "TR", "US"};
@@ -64,7 +71,54 @@ public class DataLoader implements CommandLineRunner {
 
     private final String[][] states = {brazilStates, canadaStates, germanyStates, indiaStates, turkeyStates, usStates};
 
+    // Product Category
+
     private final String productCategory[] = {"Books", "Coffee Mugs", "Mouse Pads", "Luggage Tags"};
+
+    // Products
+    // Books
+    private final String books[] = {"Crash Course in Python", "Become a Guru in JavaScript", "Exploring Vue.js",
+            "Advanced Techniques in Big Data", "Crash Course in Big Data", "JavaScript Cookbook", "Beginners Guide to SQL",
+            "Advanced Techniques in JavaScript", "Introduction to Spring Boot", "Become a Guru in React.js",
+            "Beginners Guide to Data Science", "Advanced Techniques in Java", "Exploring DevOps", "The Expert Guide to SQL",
+            "Introduction to SQL", "The Expert Guide to JavaScript", "Exploring React.js", "Advanced Techniques in React.js",
+            "Introduction to C#", "Crash Course in JavaScript", "Introduction to Machine Learning", "Become a Guru in Java",
+            "Introduction to Python", "Advanced Techniques in C#", "The Expert Guide to Machine Learning"};
+
+    private final String booksDesc[] = {
+            "Learn Python at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn JavaScript at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Vue.js at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Big Data at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Big Data at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn JavaScript at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn SQL at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn JavaScript at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Spring Boot at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn React.js at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Data Science at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Java at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn DevOps at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn SQL at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn SQL at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn JavaScript at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn React.js at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn React.js at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn C# at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn JavaScript at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Machine Learning at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Java at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Python at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn C# at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!",
+            "Learn Machine Learning at your own pace. The author explains how the technology works in easy-to-understand language. This book includes working examples that you can apply to your own projects. Purchase the book and get started today!"};
+
+    private double[] bookPrice = {14.99, 20.99, 14.99, 13.99, 18.99, 23.99, 14.99, 16.99, 25.99, 23.99, 24.99, 19.99,
+            24.99, 19.99, 22.99, 22.99, 27.99, 13.99, 26.99, 13.99, 19.99, 18.99, 26.99, 22.99, 16.99, 18.99, 18.99,
+            18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99,
+            18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 18.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99,
+            16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99,
+            16.99, 16.99, 16.99 };
+    
 
     @Override
     public void run(String... args) throws Exception {
@@ -72,6 +126,7 @@ public class DataLoader implements CommandLineRunner {
 
         createCountryAndStates();
         createProductCategory();
+        createProducts();
 
         log.debug("<<<<<<<< Bootstrap END >>>>>>>>");
     }
@@ -91,7 +146,7 @@ public class DataLoader implements CommandLineRunner {
                         .country(country)
                         .build());
             }
-            log.debug( countries[i]+ " states - done");
+            log.debug(" > " + countries[i]+ " states - done");
         }
         log.debug("Country - done");
     }
@@ -104,6 +159,33 @@ public class DataLoader implements CommandLineRunner {
                     .build());
         }
         log.debug("ProductCategory - done");
+    }
 
+    private void createProducts() {
+        int sku = 1000;
+
+        String category = productCategory[0];
+        ProductCategory productCategor = productCategoryRepository.findByCategoryName(category);
+
+        createBooks(sku, productCategor);
+
+        log.debug("Products - done");
+    }
+
+    private void createBooks(int sku, ProductCategory productCategory) {
+
+        for (int i=0; i < books.length; i++) {
+            productRepository.save(Product.builder()
+                    .sku("BOOK-TECH-" + sku)
+                    .name(books[i])
+                    .description(booksDesc[i])
+                    .unitPrice(BigDecimal.valueOf(bookPrice[i]))
+                    .active(true)
+                    .unitsInStock(100)
+                    .category(productCategory)
+                    .build());
+            sku++;
+        }
+        log.debug(" > Books - done");
     }
 }
