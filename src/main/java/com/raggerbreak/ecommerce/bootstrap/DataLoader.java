@@ -119,6 +119,7 @@ public class DataLoader implements CommandLineRunner {
             16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99, 16.99,
             16.99, 16.99, 16.99 };
 
+    // Coffee Mugs
     private String coffeeMugsName[] = {"Coffee Mug - Express", "Coffee Mug - Cherokee", "Coffee Mug - Sweeper",
             "Coffee Mug - Aspire", "Coffee Mug - Dorian", "Coffee Mug - Columbia", "Coffee Mug - Worthing",
             "Coffee Mug - Oak Cliff", "Coffee Mug - Tachyon", "Coffee Mug - Pan", "Coffee Mug - Phase",
@@ -130,6 +131,19 @@ public class DataLoader implements CommandLineRunner {
     private String coffeeMugsDesc = "Do you love mathematics? If so, then you need this elegant coffee mug with an " +
             "amazing fractal design. You don\'t have to worry about boring coffee mugs anymore. This coffee mug will " +
             "be the topic of conversation in the office, guaranteed! Buy it now!";
+
+    // Mouse Pads
+    private String mousePadsName[] = {"Mouse Pad - Express", "Mouse Pad - Cherokee", "Mouse Pad - Sweeper",
+            "Mouse Pad - Aspire", "Mouse Pad - Dorian", "Mouse Pad - Columbia", "Mouse Pad - Worthing",
+            "Mouse Pad - Oak Cliff", "Mouse Pad - Tachyon", "Mouse Pad - Pan", "Mouse Pad - Phase", "Mouse Pad - Falling",
+            "Mouse Pad - Wispy", "Mouse Pad - Arlington", "Mouse Pad - Gazing", "Mouse Pad - Azura", "Mouse Pad - Quantum Leap",
+            "Mouse Pad - Light Years", "Mouse Pad - Taylor", "Mouse Pad - Gracia", "Mouse Pad - Relax", "Mouse Pad - Windermere",
+            "Mouse Pad - Prancer", "Mouse Pad - Recursion", "Mouse Pad - Treasure"
+    };
+
+    private String mousePadsDesc = "Fractal images are amazing! You can now own a mouse pad with a unique and amazing " +
+            "fractal. The mouse pad is made of a durable and smooth material. Your mouse will easily glide across the " +
+            "mouse pad. This mouse pad will brighten your workspace. Buy it now!";
 
     @Override
     public void run(String... args) throws Exception {
@@ -183,6 +197,10 @@ public class DataLoader implements CommandLineRunner {
         productCategory = productCategoryRepository.findByCategoryName(category);
         createCoffeeMugs(sku, productCategory);
 
+        category = productCategoryName[2];
+        productCategory = productCategoryRepository.findByCategoryName(category);
+        createMousePads(sku, productCategory);
+
         log.debug("Products - done");
     }
 
@@ -217,5 +235,21 @@ public class DataLoader implements CommandLineRunner {
             sku++;
         }
         log.debug(" > Coffee Mugs - done");
+    }
+
+    private void createMousePads(int sku, ProductCategory productCategory) {
+        for (int i = 0; i < mousePadsName.length; i++) {
+            productRepository.save(Product.builder()
+                    .sku("MOUSEPAD-" + sku)
+                    .name(mousePadsName[i])
+                    .description(mousePadsDesc)
+                    .unitPrice(BigDecimal.valueOf(17.99))
+                    .active(true)
+                    .unitsInStock(100)
+                    .category(productCategory)
+                    .build());
+            sku++;
+        }
+        log.debug(" > Mouse Pads - done");
     }
 }
