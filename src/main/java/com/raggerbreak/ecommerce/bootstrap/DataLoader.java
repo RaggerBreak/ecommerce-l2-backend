@@ -145,15 +145,30 @@ public class DataLoader implements CommandLineRunner {
             "fractal. The mouse pad is made of a durable and smooth material. Your mouse will easily glide across the " +
             "mouse pad. This mouse pad will brighten your workspace. Buy it now!";
 
+    // LuggageTags
+    private String luggageTagsName[] = {"Luggage Tag - Cherish", "Luggage Tag - Adventure", "Luggage Tag - Skyline",
+            "Luggage Tag - River", "Luggage Tag - Trail Steps", "Luggage Tag - Blooming", "Luggage Tag - Park",
+            "Luggage Tag - Beauty", "Luggage Tag - Water Fall", "Luggage Tag - Trail", "Luggage Tag - Skyscraper",
+            "Luggage Tag - Leaf", "Luggage Tag - Jungle", "Luggage Tag - Shoreline", "Luggage Tag - Blossom",
+            "Luggage Tag - Lock", "Luggage Tag - Cafe", "Luggage Tag - Darling", "Luggage Tag - Full Stack",
+            "Luggage Tag - Courtyard", "Luggage Tag - Coaster", "Luggage Tag - Bridge", "Luggage Tag - Sunset",
+            "Luggage Tag - Flames", "Luggage Tag - Countryside"
+    };
+
+    private String luggageTagsDesc = "This luggage tag will help you identify your luggage. The luggage tag is very " +
+            "unique and it will stand out from the crowd. The luggage tag is created out of a rugged and durable " +
+            "plastic. Buy this luggage tag now to make it easy to identify your luggage!";
+
     @Override
     public void run(String... args) throws Exception {
+        log.debug("");
         log.debug("<<<<<<<< Bootstrap START >>>>>>>>");
 
         createCountryAndStates();
         createProductCategory();
         createProducts();
 
-        log.debug("<<<<<<<< Bootstrap END >>>>>>>>");
+        log.debug("<<<<<<<< Bootstrap END >>>>>>>>\n");
     }
 
     private void createCountryAndStates() {
@@ -201,6 +216,10 @@ public class DataLoader implements CommandLineRunner {
         productCategory = productCategoryRepository.findByCategoryName(category);
         createMousePads(sku, productCategory);
 
+        category = productCategoryName[3];
+        productCategory = productCategoryRepository.findByCategoryName(category);
+        createLuggageTags(sku, productCategory);
+
         log.debug("Products - done");
     }
 
@@ -222,10 +241,10 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createCoffeeMugs(int sku, ProductCategory productCategory) {
-        for (int i = 0; i < coffeeMugsName.length; i++) {
+        for (String name : coffeeMugsName) {
             productRepository.save(Product.builder()
                     .sku("COFFEEMUG-" + sku)
-                    .name(coffeeMugsName[i])
+                    .name(name)
                     .description(coffeeMugsDesc)
                     .unitPrice(BigDecimal.valueOf(18.99))
                     .active(true)
@@ -238,10 +257,10 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createMousePads(int sku, ProductCategory productCategory) {
-        for (int i = 0; i < mousePadsName.length; i++) {
+        for (String name : mousePadsName) {
             productRepository.save(Product.builder()
                     .sku("MOUSEPAD-" + sku)
-                    .name(mousePadsName[i])
+                    .name(name)
                     .description(mousePadsDesc)
                     .unitPrice(BigDecimal.valueOf(17.99))
                     .active(true)
@@ -251,5 +270,21 @@ public class DataLoader implements CommandLineRunner {
             sku++;
         }
         log.debug(" > Mouse Pads - done");
+    }
+
+    private void createLuggageTags(int sku, ProductCategory productCategory) {
+        for (String name : luggageTagsName) {
+            productRepository.save(Product.builder()
+                    .sku("LUGGAGETAG-" + sku)
+                    .name(name)
+                    .description(luggageTagsDesc)
+                    .unitPrice(BigDecimal.valueOf(16.99))
+                    .active(true)
+                    .unitsInStock(100)
+                    .category(productCategory)
+                    .build());
+            sku++;
+        }
+        log.debug(" > Luggage Tags - done");
     }
 }
