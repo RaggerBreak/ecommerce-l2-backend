@@ -1,18 +1,19 @@
 package com.raggerbreak.ecommerce.bootstrap;
 
-import com.raggerbreak.ecommerce.domain.Country;
-import com.raggerbreak.ecommerce.domain.Product;
-import com.raggerbreak.ecommerce.domain.ProductCategory;
-import com.raggerbreak.ecommerce.domain.State;
-import com.raggerbreak.ecommerce.repositories.CountryRepository;
-import com.raggerbreak.ecommerce.repositories.ProductCategoryRepository;
-import com.raggerbreak.ecommerce.repositories.ProductRepository;
-import com.raggerbreak.ecommerce.repositories.StateRepository;
+import com.raggerbreak.ecommerce.domain.*;
+import com.raggerbreak.ecommerce.repositories.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 
@@ -25,6 +26,7 @@ public class DataLoader implements CommandLineRunner {
     private final StateRepository stateRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
 
     // Countries and States
 
@@ -201,7 +203,7 @@ public class DataLoader implements CommandLineRunner {
         log.debug("ProductCategory - done");
     }
 
-    private void createProducts() {
+    private void createProducts() throws IOException {
         int sku = 1000;
 
         String category = productCategoryName[0];
@@ -223,9 +225,10 @@ public class DataLoader implements CommandLineRunner {
         log.debug("Products - done");
     }
 
-    private void createBooks(int sku, ProductCategory productCategory) {
+    private void createBooks(int sku, ProductCategory productCategory) throws IOException {
 
         for (int i = 0; i < booksName.length; i++) {
+
             productRepository.save(Product.builder()
                     .sku("BOOK-TECH-" + sku)
                     .name(booksName[i])
@@ -234,13 +237,14 @@ public class DataLoader implements CommandLineRunner {
                     .active(true)
                     .unitsInStock(100)
                     .category(productCategory)
+                    .image(saveImage("src/main/resources/bootstrap/products/books/book-luv2code-" + sku + ".png"))
                     .build());
             sku++;
         }
         log.debug(" > Books - done");
     }
 
-    private void createCoffeeMugs(int sku, ProductCategory productCategory) {
+    private void createCoffeeMugs(int sku, ProductCategory productCategory) throws IOException {
         for (String name : coffeeMugsName) {
             productRepository.save(Product.builder()
                     .sku("COFFEEMUG-" + sku)
@@ -249,6 +253,7 @@ public class DataLoader implements CommandLineRunner {
                     .unitPrice(BigDecimal.valueOf(18.99))
                     .active(true)
                     .unitsInStock(100)
+                    .image(saveImage("src/main/resources/bootstrap/products/coffeemugs/coffeemug-luv2code-" + sku + ".png"))
                     .category(productCategory)
                     .build());
             sku++;
@@ -256,7 +261,7 @@ public class DataLoader implements CommandLineRunner {
         log.debug(" > Coffee Mugs - done");
     }
 
-    private void createMousePads(int sku, ProductCategory productCategory) {
+    private void createMousePads(int sku, ProductCategory productCategory) throws IOException {
         for (String name : mousePadsName) {
             productRepository.save(Product.builder()
                     .sku("MOUSEPAD-" + sku)
@@ -265,6 +270,7 @@ public class DataLoader implements CommandLineRunner {
                     .unitPrice(BigDecimal.valueOf(17.99))
                     .active(true)
                     .unitsInStock(100)
+                    .image(saveImage("src/main/resources/bootstrap/products/mousepads/mousepad-luv2code-" + sku + ".png"))
                     .category(productCategory)
                     .build());
             sku++;
@@ -272,7 +278,7 @@ public class DataLoader implements CommandLineRunner {
         log.debug(" > Mouse Pads - done");
     }
 
-    private void createLuggageTags(int sku, ProductCategory productCategory) {
+    private void createLuggageTags(int sku, ProductCategory productCategory) throws IOException {
         for (String name : luggageTagsName) {
             productRepository.save(Product.builder()
                     .sku("LUGGAGETAG-" + sku)
@@ -281,10 +287,23 @@ public class DataLoader implements CommandLineRunner {
                     .unitPrice(BigDecimal.valueOf(16.99))
                     .active(true)
                     .unitsInStock(100)
+                    .image(saveImage("src/main/resources/bootstrap/products/luggagetags/luggagetag-luv2code-" + sku + ".png"))
                     .category(productCategory)
                     .build());
             sku++;
         }
         log.debug(" > Luggage Tags - done");
+    }
+
+    private Image saveImage(String path) throws IOException {
+
+        BufferedImage bi = ImageIO.read(new File(path));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bi, "png", baos);
+        byte[] bytes = baos.toByteArray();
+
+        return imageRepository.save(Image.builder()
+                .imageByte(bytes)
+                .build());
     }
 }

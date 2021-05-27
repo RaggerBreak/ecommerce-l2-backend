@@ -1,5 +1,6 @@
 package com.raggerbreak.ecommerce.services;
 
+import com.raggerbreak.ecommerce.domain.Image;
 import com.raggerbreak.ecommerce.repositories.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class ImageServiceImpl implements ImageService {
     public byte[] getImage(Long id) {
 
         return imageRepository.findById(id)
-                .orElse(null)
-                .getImageByte();
+                .map(Image::getImageByte)
+                .orElse(null);
     }
 }
