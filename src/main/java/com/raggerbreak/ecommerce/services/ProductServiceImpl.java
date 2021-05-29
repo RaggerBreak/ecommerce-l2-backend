@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductLineDto getProductsByNameContaining(String keyword, Pageable pageable) {
 
 
-        Page<ProductDto> page = productRepository.findByNameContaining(keyword, pageable)
+        Page<ProductDto> page = productRepository.findByNameContainingIgnoreCase(keyword, pageable)
                 .map(productMapper::productToDto);
 
         return ProductLineDto.builder()
