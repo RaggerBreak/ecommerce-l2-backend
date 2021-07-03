@@ -26,16 +26,12 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/{productId}")
-    public ResponseEntity<EntityModel<ProductDto>> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         ProductDto product = productService.getProduct(productId);
 
-        //  Link link = linkTo(ProductController.class).slash(productId).withSelfRel();
-        Link link = linkTo(methodOn(ProductController.class).getProductById(productId)).withSelfRel();
+        addLinkToProduct(product);
 
-        EntityModel<ProductDto> productDtoEntityModel = EntityModel.of(product, link);
-
-
-        return new ResponseEntity<EntityModel<ProductDto>>(productDtoEntityModel, HttpStatus.OK);
+        return new ResponseEntity<ProductDto>(product, HttpStatus.OK);
     }
 
     @GetMapping("/search/category")
@@ -95,8 +91,13 @@ public class ProductController {
 
     public void addLinksToProducts(ProductLineDto productLineDto) {
         productLineDto.getProducts()
-                .forEach(product -> product.add(
-                        linkTo(methodOn(ProductController.class).getProductById(product.getId())).withSelfRel()
-                ));
+                .forEach(this::addLinkToProduct);
+    }
+
+    public void addLinkToProduct(ProductDto productDto) {
+        productDto.add(
+                linkTo(methodOn(ProductController.class).getProductById(productDto.getId())).withSelfRel(),
+                linkTo(methodOn(ImageController.class).getImageById(productDto.getImageId())).withRel("image")
+        );
     }
 }
